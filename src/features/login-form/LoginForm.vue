@@ -7,6 +7,9 @@
     <router-link to="/">
       <button @click="loginPostRequest" class="login-form__button">Авторизироваться</button>
     </router-link>
+    <router-link to="/registration">
+      <p>Ещё не зарегистрированы?</p>
+    </router-link>
   </form>
 </template>
 <script setup>
@@ -37,11 +40,15 @@
         },
       });
 
+
       const resultData = await response.json();
       data.value = resultData;
-
-      cookies.set('authData', resultData);
       console.log(data);
+
+      const userToken = resultData.data?.user_token;
+      console.log(userToken);
+      cookies.set('authData', userToken);
+      location.reload();
 
       console.log(resultData);
     } catch (error) {

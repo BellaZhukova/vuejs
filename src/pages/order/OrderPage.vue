@@ -1,19 +1,19 @@
 <template>
-  <div class="cart-page">
+  <div class="order-page">
     <HeaderComponent></HeaderComponent>
-    <h1>Корзина</h1>
-    <Cart></Cart>
+    <Order></Order>
   </div>
 </template>
 <script setup>
-import Cart from "@/features/cart/Cart.vue";
+import Order from "@/features/order/Order.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 </script>
 <style>
-.cart-page {
+.order-page {
   display: flex;
   flex-direction: column;
-  text-align: center;
   gap: 20px;
+  justify-content: center;
+  align-items: center;
 }
 </style>

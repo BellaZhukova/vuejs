@@ -1,7 +1,4 @@
 <template>
-  <router-link to="/">
-    <button>Вернуться на главную</button>
-  </router-link>
   <div class="catalog">
     <h1>Каталог</h1>
     <div class="catalog-card">
@@ -9,8 +6,9 @@
       <h3>{{product.name}}</h3>
       <p class="catalog-card__info-description">Описание: {{product.description}}</p>
       <p>Цена: {{product.price}} руб.</p>
+      <p>Код товара: {{product.id}}</p>
       <div class="catalog-card__button">
-        <button @click="cartPostRequest" >Добавить в корзину</button>
+        <button @click="cartPostRequest(product)" >Добавить в корзину</button>
       </div>
     </div>
   </div>
@@ -19,12 +17,12 @@
 <script setup>
 
 import {onMounted, ref} from "vue";
-import {useRoute} from "vue-router";
+import {useCookies} from "vue3-cookies";
+const { cookies } = useCookies();
 
-
-const route = useRoute();
 
 const products = ref([])
+
 
 let cart = ref([])
 
@@ -39,20 +37,24 @@ async function getResponse() {
   }
 }
 
-async function cartPostRequest(id) {
+async function cartPostRequest(product) {
+  const token = cookies.get('authData');
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/${product.id}`, {
       method: 'POST',
-      body: JSON.stringify({ id: id }),
       headers: {
-        'Content-Type': 'application/json'
+         Authorization: `Bearer ${token}`
       },
+      body: JSON.stringify({
+        id: product.id,
+      })
     });
 
-    const resultData = await response.json();
-    console.log(resultData);
+    const data = await response.json();
+
+    console.log(data);
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -60,6 +62,7 @@ async function cartPostRequest(id) {
 
 onMounted(() => {
   getResponse();
+  cartPostRequest();
 });
 </script>
 <style>

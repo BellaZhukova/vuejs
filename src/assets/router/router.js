@@ -19,9 +19,9 @@ export const router = createRouter({
             component: () => import('@/pages/catalog/CatalogPage.vue')
         },
         {
-            path: '/cart/:id',
+            path: '/cart',
             name: 'cart',
-            component: () => import('@/features/cart/Cart.vue')
+            component: () => import('@/pages/cart/CartPage.vue')
         },
 
         {
@@ -35,9 +35,9 @@ export const router = createRouter({
             component: () => import('@/pages/registration/RegistrationPage.vue')
         },
         {
-            path: '/cart',
-            name: 'cart',
-            component: () => import('@/pages/cart/CartPage.vue')
-        },
+            path: '/order',
+            name: 'order',
+            component: () => import('@/pages/order/OrderPage.vue')
+        }
     ],
 })
