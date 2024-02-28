@@ -17,7 +17,6 @@ const { cookies } = useCookies();
 const products = ref([])
 async function getResponse() {
   const token = cookies.get('authData');
-  try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/order`, {
       method: 'GET',
       headers: {
@@ -25,11 +24,7 @@ async function getResponse() {
       },
     });
     const data = await response.json();
-    console.log(data)
     products.value = data;
-  } catch (error) {
-    console.log(error);
-  }
 }
 onMounted(
     () => {

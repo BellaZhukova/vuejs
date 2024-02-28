@@ -27,19 +27,13 @@ const products = ref([])
 let cart = ref([])
 
 async function getResponse() {
-  try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/products`);
     const data = await response.json();
-    console.log(data)
     products.value = data;
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 async function cartPostRequest(product) {
   const token = cookies.get('authData');
-  try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/${product.id}`, {
       method: 'POST',
       headers: {
@@ -51,11 +45,6 @@ async function cartPostRequest(product) {
     });
 
     const data = await response.json();
-
-    console.log(data);
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 

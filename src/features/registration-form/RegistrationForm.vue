@@ -1,12 +1,12 @@
 <template>
   <form class="registration-form">
-    <p v-if="error">Неверно заполнены поля</p>
+    <p v-if="errorMessage">неверные данные</p>
     <div class="registration-form__registration">
       <input placeholder="Придумайте логин" class="registration-form__input" v-model="model.fio">
       <input placeholder="Введите свою почту" class="registration-form__input" type="email" v-model="model.email">
       <input placeholder="Придумайте пароль" class="registration-form__input" type="password" v-model="model.password">
     </div>
-    <router-link to="/auth"><button @click="registrationPostRequest" class="button-registration">Зарегистрироваться</button></router-link>
+    <router-link to="/"><button @click="registrationPostRequest" class="button-registration">Зарегистрироваться</button></router-link>
     <router-link to="/auth">
       <p>Уже зарегистрированны?</p>
     </router-link>
@@ -23,6 +23,7 @@ const model = ref({
 const isLoading = ref(false);
 const data = ref([]);
 const error = ref(false);
+const errorMessage = ref('');
 
 async function registrationPostRequest() {
   try {
@@ -39,26 +40,16 @@ async function registrationPostRequest() {
         'Content-Type': 'application/json'
       },
     });
-
-    if (!response.ok) {
-      if (response.status === 422) {
-        const errorText = await response.text(); // Получаем текст ошибки из ответа
-        error.value = true; // Устанавливаем значение error в true при ошибке
-        console.error(`Ошибка 422: ${errorText}`); // Выводим текст ошибки в консоль
-        return;
-      }
+    if (response.ok) {
+      const resultData = await response.json();
+      data.value = resultData;
+    } else {
+      error.value = true;
+      errorMessage.value = 'Неправильные данные. Пожалуйста, проверьте введенную информацию.';
     }
-
-
-    const resultData = await response.json();
-    data.value = resultData;
-    console.log(data);
-
-    console.log(resultData);
   } catch (error) {
     error.value = true;
     isLoading.value = false;
-    console.error(error);
   }
 }
 

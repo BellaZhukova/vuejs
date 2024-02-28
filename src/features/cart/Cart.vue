@@ -1,13 +1,14 @@
 <template>
   <div class="add-cart">
+    <p v-if="products < 0">Корзина пустая</p>
     <div class="add-cart__info" v-for="product in products.data" :key="product.id">
       <h3>{{product.name}}</h3>
       <p class="catalog-card__info-description">Описание: {{product.description}}</p>
       <p>Цена: {{product.price}} руб.</p>
       <button @click="deleteProduct(product)">Удалить товар из корзины</button>
-      <router-link to="/order">
+      <div>
         <button @click="orderProduct(product)">Оформить заказ</button>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -16,9 +17,9 @@ import {onMounted, ref} from "vue";
 import {useCookies} from "vue3-cookies";
 const { cookies } = useCookies();
 const products = ref([])
+const error = ref(false);
 async function getResponse() {
-  const token = cookies.get('authData');
-  try {
+  const token = cookies.get('authData')
     const response = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
       method: 'GET',
       headers: {
@@ -26,16 +27,11 @@ async function getResponse() {
       },
     });
     const data = await response.json();
-    console.log(data)
     products.value = data;
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 async function deleteProduct(product) {
   const token = cookies.get('authData');
-  try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/${product.id}`, {
       method: 'DELETE',
       headers: {
@@ -43,17 +39,11 @@ async function deleteProduct(product) {
       }
     });
     const data = await response.json();
-    console.log(data)
     location.reload();
-    }
-    catch (error) {
-    console.log(error);
-  }
 }
 
 async function orderProduct() {
   const token = cookies.get('authData');
-  try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/order`, {
       method: 'POST',
       headers: {
@@ -61,11 +51,6 @@ async function orderProduct() {
       }
     });
     const data = await response.json();
-    console.log(data)
-  }
-  catch (error) {
-    console.log(error);
-  }
 }
 
 onMounted(() => {

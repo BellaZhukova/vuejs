@@ -8,6 +8,9 @@
         <router-link to="/cart">
           <button class="header-nav-auth__button">корзина</button>
         </router-link>
+        <router-link to="/order">
+          <button class="header-nav-auth__button">оформленные заказы</button>
+        </router-link>
         <button class="header-nav-auth__button" @click="logoutAccount">выход</button>
       </div>
       <div class="header-nav-auth" v-else>
@@ -32,7 +35,6 @@ const authCookieValue = computed(() => cookies.get('authData') || null);
 console.log(authCookieValue)
 
 async function logoutAccount() {
-  try {
     const token = cookies.get('authData');
     const del = {
       headers: {
@@ -44,12 +46,6 @@ async function logoutAccount() {
     const data = await response.json();
     cookies.remove('authData');
     location.reload();
-    console.log(data)
-
-    console.log(token);
-  } catch (error) {
-    console.log(error);
-  }
 }
 </script>
 <style>

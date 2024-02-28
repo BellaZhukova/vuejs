@@ -43,14 +43,11 @@
 
       const resultData = await response.json();
       data.value = resultData;
-      console.log(data);
 
       const userToken = resultData.data?.user_token;
-      console.log(userToken);
       cookies.set('authData', userToken);
       location.reload();
 
-      console.log(resultData);
     } catch (error) {
       error.value = error;
       isLoading.value = false;
